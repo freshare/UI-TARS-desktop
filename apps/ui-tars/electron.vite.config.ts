@@ -29,20 +29,21 @@ export default defineConfig({
         entry: './src/main/main.ts',
       },
       rollupOptions: {
-        // ——————【核弹级修复：一劳永逸】——————
-        // 不再手动列出黑名单，而是使用函数判断：
-        // 只要路径里包含 'node_modules'，直接排除，禁止打包！
-        // 这样彻底解决了 Windows 下插件失效导致的打包报错问题。
-        external: (id) => {
-          if (id.includes('node_modules')) {
-            return true;
-          }
-          return false;
-        },
-        // ——————【修复结束】——————
+        // ——————【最终修正版：正则黑名单】——————
+        // 使用正则 /^.../ 可以匹配包名及其子路径
+        // 比如 /^ajv/ 既能匹配 'ajv' 也能匹配 'ajv/dist/...'
+        external: [
+          /^js-yaml/, 
+          /^electron-debug/, 
+          /^keyboardevent-from-electron-accelerator/,
+          /^ajv/,
+          /^uri-js/,
+          /^json-schema-traverse/, // ajv 的小伙伴，顺手带上
+          /^fast-deep-equal/       // ajv 的小伙伴+1
+        ],
+        // ——————【修改结束】——————
         output: {
           manualChunks(id): string | void {
-            // IMPORTANT: can't change the name of the chunk, avoid private key leak
             if (id.includes('app_private')) {
               return 'app_private';
             }
