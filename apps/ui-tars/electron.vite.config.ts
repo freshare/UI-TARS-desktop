@@ -29,17 +29,28 @@ export default defineConfig({
         entry: './src/main/main.ts',
       },
       rollupOptions: {
-        // ——————【最终修正版：正则黑名单】——————
-        // 使用正则 /^.../ 可以匹配包名及其子路径
-        // 比如 /^ajv/ 既能匹配 'ajv' 也能匹配 'ajv/dist/...'
+        // ——————【全家桶黑名单】——————
+        // 我们把所有可能出问题的“刺头”都列在这里
         external: [
+          // 1. 之前报错过的：
           /^js-yaml/, 
           /^electron-debug/, 
           /^keyboardevent-from-electron-accelerator/,
           /^ajv/,
           /^uri-js/,
-          /^json-schema-traverse/, // ajv 的小伙伴，顺手带上
-          /^fast-deep-equal/       // ajv 的小伙伴+1
+          /^json-schema-traverse/,
+          /^fast-deep-equal/,
+          
+          // 2. 这次报错的（自动更新相关）：
+          /^electron-updater/, 
+          /^sax/,
+          
+          // 3. 预防性加入的（常见报错大户）：
+          /^semver/,            // 版本号工具，经常报错
+          /^source-map-support/,// 调试工具，经常报错
+          /^axios/,             // 网络库，经常报错
+          /^adm-zip/,           // 解压库
+          /^builder-util-runtime/ 
         ],
         // ——————【修改结束】——————
         output: {
@@ -108,7 +119,9 @@ export default defineConfig({
     },
     resolve: {
       alias: {
+        alias: {
         crypto: resolve(__dirname, 'src/renderer/src/polyfills/crypto.ts'),
+      },
       },
     },
   },
