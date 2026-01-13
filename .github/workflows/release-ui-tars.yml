@@ -64,7 +64,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: publish arm64
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -130,7 +130,7 @@ jobs:
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       - name: install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: publish x64
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -201,7 +201,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
       - name: install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
