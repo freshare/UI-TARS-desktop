@@ -31,8 +31,14 @@ export default defineConfig({
       rollupOptions: {
         // ——————【全家桶黑名单】——————
         external: [
-          // 【新增】Mac 专用包，Windows 打包时强制排除，解决 human-signals 解析错误
+          // 【Mac 权限相关】
           '@computer-use/mac-screen-capture-permissions',
+          
+          // 【本次新增修复】解决字体解析库报错
+          /^load-bmfont/,
+          /^parse-bmfont-xml/,
+
+          // 【原有配置】
           /^js-yaml/,
           /^electron-debug/,
           /^keyboardevent-from-electron-accelerator/,
