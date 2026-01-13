@@ -29,8 +29,17 @@ export default defineConfig({
         entry: './src/main/main.ts',
       },
       rollupOptions: {
-        // 这里我们把所有报错的“捣乱分子”都列出来，让打包工具跳过它们
-        external: ['js-yaml', 'electron-debug', 'keyboardevent-from-electron-accelerator'],
+        // ——————【关键修改：不断壮大的黑名单】——————
+        // 我们把 ajv, ajv-formats 以及之前的报错项都加进来
+        external: [
+          'js-yaml', 
+          'electron-debug', 
+          'keyboardevent-from-electron-accelerator',
+          'ajv',
+          'ajv-formats',
+          'uri-js' // 预判一手，ajv 经常依赖这个，顺手加上防止下次报错
+        ],
+        // ——————【修改结束】——————
         output: {
           manualChunks(id): string | void {
             // IMPORTANT: can't change the name of the chunk, avoid private key leak
