@@ -29,6 +29,10 @@ export default defineConfig({
         entry: './src/main/main.ts',
       },
       rollupOptions: {
+        // ——————【关键修改开始】——————
+        // 显式排除 js-yaml，防止打包工具尝试去解析它导致报错
+        external: ['js-yaml'], 
+        // ——————【关键修改结束】——————
         output: {
           manualChunks(id): string | void {
             // IMPORTANT: can't change the name of the chunk, avoid private key leak
