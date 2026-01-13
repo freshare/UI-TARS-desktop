@@ -29,18 +29,20 @@ export default defineConfig({
         entry: './src/main/main.ts',
       },
       rollupOptions: {
-        // ——————【核弹级修改】——————
-        // 使用正则 /^.../ 匹配，这样能排除掉 ajv/dist/... 这种深层路径
-        external: [
-          /^js-yaml/, 
-          /^electron-debug/, 
-          /^keyboardevent-from-electron-accelerator/,
-          /^ajv/,
-          /^uri-js/
-        ],
-        // ——————【修改结束】——————
+        // ——————【核弹级修复：一劳永逸】——————
+        // 不再手动列出黑名单，而是使用函数判断：
+        // 只要路径里包含 'node_modules'，直接排除，禁止打包！
+        // 这样彻底解决了 Windows 下插件失效导致的打包报错问题。
+        external: (id) => {
+          if (id.includes('node_modules')) {
+            return true;
+          }
+          return false;
+        },
+        // ——————【修复结束】——————
         output: {
           manualChunks(id): string | void {
+            // IMPORTANT: can't change the name of the chunk, avoid private key leak
             if (id.includes('app_private')) {
               return 'app_private';
             }
