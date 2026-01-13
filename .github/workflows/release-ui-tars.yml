@@ -7,34 +7,41 @@ env:
   NODE_OPTIONS: --max-old-space-size=8192
   HUSKY: 0
 
+# 👇 这一段是修复报错的核心，你已经加对了
 permissions:
-  id-token: write
-  contents: write
-  attestations: write
+  contents: write      # 允许上传 Release 附件
+  id-token: write      # 允许 OIDC 身份验证（如果用到）
+  attestations: write  # 允许生成构建证明
 
 jobs:
-  # 只保留这一个 Windows 任务，其他全删了
   publish_on_win:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Show operating system info
         run: |
           echo "Operating System:"
           cmd /c ver
+
       - name: Install pnpm
         run: npm install -g pnpm@9
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
       
-      # 这里是你改对的关键命令：
+      # 依赖安装
       - name: install dependencies
         run: pnpm install --no-frozen-lockfile
 
+      # 发布步骤
       - name: publish
         env:
+          # 必须传递 GITHUB_TOKEN，否则无法上传 Release
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 必须传递私钥，否则打包会失败
           UI_TARS_APP_PRIVATE_KEY_BASE64: ${{ secrets.UI_TARS_APP_PRIVATE_KEY_BASE64 }}
+        # 进入应用目录并执行发布命令
         run: cd apps/ui-tars && pnpm run publish:win32
