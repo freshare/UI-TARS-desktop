@@ -34,9 +34,13 @@ export default defineConfig({
           // 【Mac 权限相关】
           '@computer-use/mac-screen-capture-permissions',
           
-          // 【本次新增修复】解决字体解析库报错
+          // 【字体解析库】
           /^load-bmfont/,
           /^parse-bmfont-xml/,
+
+          // 【本次新增修复】代理和语法解析库
+          /^proxy-agent/,
+          /^esprima/,
 
           // 【原有配置】
           /^js-yaml/,
