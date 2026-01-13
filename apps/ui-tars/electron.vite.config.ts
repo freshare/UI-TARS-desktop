@@ -30,22 +30,23 @@ export default defineConfig({
       },
       rollupOptions: {
         // ——————【全家桶黑名单】——————
-        // 保持之前的修复逻辑不变，继续排除这些报错包
         external: [
-          /^js-yaml/, 
-          /^electron-debug/, 
+          // 【新增】Mac 专用包，Windows 打包时强制排除，解决 human-signals 解析错误
+          '@computer-use/mac-screen-capture-permissions',
+          /^js-yaml/,
+          /^electron-debug/,
           /^keyboardevent-from-electron-accelerator/,
           /^ajv/,
           /^uri-js/,
           /^json-schema-traverse/,
           /^fast-deep-equal/,
-          /^electron-updater/, 
+          /^electron-updater/,
           /^sax/,
-          /^semver/,            
+          /^semver/,
           /^source-map-support/,
-          /^axios/,             
-          /^adm-zip/,           
-          /^builder-util-runtime/ 
+          /^axios/,
+          /^adm-zip/,
+          /^builder-util-runtime/
         ],
         // ——————【修改结束】——————
         output: {
@@ -113,11 +114,9 @@ export default defineConfig({
       APP_VERSION: JSON.stringify(pkg.version),
     },
     resolve: {
-      // ——————【这里是刚才报错的地方，已修正】——————
       alias: {
         crypto: resolve(__dirname, 'src/renderer/src/polyfills/crypto.ts'),
       },
-      // ——————【修正结束】——————
     },
   },
 });
