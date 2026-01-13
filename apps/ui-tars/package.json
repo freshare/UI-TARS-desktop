@@ -1,6 +1,10 @@
 {
   "name": "ui-tars-desktop",
   "version": "0.3.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freshare/ui-tars-desktop.git"
+  },
   "private": true,
   "main": "./dist/main/main.js",
   "packageManager": "pnpm@9.10.0",
