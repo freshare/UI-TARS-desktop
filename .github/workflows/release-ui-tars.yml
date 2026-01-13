@@ -194,7 +194,7 @@ jobs:
         run: |
           echo "Operating System:"
           cmd /c ver
-      - name: Install pnpm
+      - name: Install pnpm --no-frozen-lockfile
         run: npm install -g pnpm@9
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
