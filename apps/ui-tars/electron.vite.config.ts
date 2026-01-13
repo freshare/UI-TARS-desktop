@@ -30,9 +30,8 @@ export default defineConfig({
       },
       rollupOptions: {
         // ——————【全家桶黑名单】——————
-        // 我们把所有可能出问题的“刺头”都列在这里
+        // 保持之前的修复逻辑不变，继续排除这些报错包
         external: [
-          // 1. 之前报错过的：
           /^js-yaml/, 
           /^electron-debug/, 
           /^keyboardevent-from-electron-accelerator/,
@@ -40,16 +39,12 @@ export default defineConfig({
           /^uri-js/,
           /^json-schema-traverse/,
           /^fast-deep-equal/,
-          
-          // 2. 这次报错的（自动更新相关）：
           /^electron-updater/, 
           /^sax/,
-          
-          // 3. 预防性加入的（常见报错大户）：
-          /^semver/,            // 版本号工具，经常报错
-          /^source-map-support/,// 调试工具，经常报错
-          /^axios/,             // 网络库，经常报错
-          /^adm-zip/,           // 解压库
+          /^semver/,            
+          /^source-map-support/,
+          /^axios/,             
+          /^adm-zip/,           
           /^builder-util-runtime/ 
         ],
         // ——————【修改结束】——————
@@ -118,11 +113,11 @@ export default defineConfig({
       APP_VERSION: JSON.stringify(pkg.version),
     },
     resolve: {
+      // ——————【这里是刚才报错的地方，已修正】——————
       alias: {
-        alias: {
         crypto: resolve(__dirname, 'src/renderer/src/polyfills/crypto.ts'),
       },
-      },
+      // ——————【修正结束】——————
     },
   },
 });
